@@ -1,0 +1,7 @@
+pytesseract
+pyautogui
+speech_recognition
+pyperclip
+PIL
+pygame
+pytube

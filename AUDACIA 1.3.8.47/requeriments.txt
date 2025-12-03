@@ -1,0 +1,4 @@
+pyautogui
+speech_recognition
+pyperclip
+PIL

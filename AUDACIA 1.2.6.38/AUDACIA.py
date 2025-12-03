@@ -1,0 +1,187 @@
+import time
+import pyautogui
+import speech_recognition as sr
+import pyautogui as pg
+import os
+from tkinter import *
+from datetime import datetime
+
+# VARIÁVEIS GLOBAIS ABSOLUTAS
+
+INICIO = 0
+FIM = 0
+FRASE = ""
+TEMPO_GASTO = 0
+TAMANHO_DA_TELA = [0, 0]
+
+# *** FUNÇÕES GERAIS ***
+
+# FUNÇÕES RELATIVAS A TEMPO OU PARADA DO MESMO
+
+
+def inicio():
+    global INICIO
+    INICIO = time.time()
+
+
+def fim():
+    global FIM
+    FIM = time.time()
+
+
+def tempo_gasto():
+    global INICIO
+    global FIM
+    global TEMPO_GASTO
+    if INICIO != 0 and FIM != 0:
+        TEMPO_GASTO = FIM - INICIO
+        return TEMPO_GASTO
+    else:
+        return 0
+
+
+def data_atual():
+    return (datetime.today().strftime('%d-%m-%Y')).replace("-", "/")
+
+
+def pare(segundos):
+    time.sleep(segundos)
+
+
+# FUNÇÃO DE CONVERTER VOZ EM TEXTO
+
+
+def ouvir_microfone():
+    global FRASE
+
+    microfone = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        microfone.adjust_for_ambient_noise(source)
+        print("Diga alguma coisa: ")
+        audio = microfone.listen(source)
+
+    try:
+        FRASE = microfone.recognize_google(audio, language='pt-BR')
+        print("Você disse: " + FRASE)
+
+    except sr.UnknownValueError:
+        print("Não entendi")
+        FRASE = ""
+
+
+# FUNÇÕES DO TKINTER
+
+
+def tela():
+    return Tk()
+
+
+def definir_titulo(nome_tela, titulo):
+    return nome_tela.title(f"{titulo}")
+
+
+def tamanho_de_tela(nome_tela, tamanho_x, tamanho_y, distancia_de_x, distancia_de_y):
+    return nome_tela.geometry(f"{tamanho_x}x{tamanho_y}+{distancia_de_x}+{distancia_de_y}")
+
+
+def texto(tela_text, texto_text, font_text, position_text="center"):
+    return Label(master=tela_text, text=texto_text, anchor=position_text, font=font_text)
+
+
+def entrada_de_texto(tela_entry, font_entry, justificar="center"):
+    return Entry(master=tela_entry, font=font_entry, justify=justificar)
+
+
+def botao(tela_button, texto_button, font_button, comando, position_button="center"):
+    return Button(master=tela_button, text=texto_button, font=font_button, command=comando, anchor=position_button)
+
+
+def posicionar(nome, largura, altura, x, y):
+    nome.place(width=largura, height=altura, x=x, y=y)
+
+
+# FUNÇÃO DO PYAUTOGUI
+
+
+def rolar_para_baixo(numero_de_rolagens):
+    pg.scroll(-1 * (int(numero_de_rolagens)))
+
+
+def rolar_para_cima(numero_de_rolagens):
+    pg.scroll(int(numero_de_rolagens))
+
+
+def escreva(text_):
+    for x in text_:
+        time.sleep(0.01)
+        pg.write(str(x))
+
+
+def segurar_tecla(tecla_):
+    pg.keyDown(str(tecla_))
+
+
+def soltar_tecla(tecla_):
+    pg.keyUp(str(tecla_))
+
+
+def aperte(tecla_):
+    pg.press(str(tecla_))
+
+
+def clique_duplo(x, y):
+    pg.doubleClick(x=x, y=y)
+
+
+def clique_direito(x, y):
+    pg.rightClick(x=x, y=y)
+
+
+def clique_duplo_imagem(nome_da_imagem):
+    pg.doubleClick(str(nome_da_imagem))
+
+
+def clique_direito_imagem(nome_da_imagem):
+    pg.rightClick(str(nome_da_imagem))
+
+
+def clique_simples_imagem(nome_da_imagem):
+    pg.click(str(nome_da_imagem))
+
+
+def clique_simples(x, y):
+    pg.click(x=x, y=y)
+
+
+def comando_duplo(tecla_a, tecla_b):
+    pg.hotkey(str(tecla_a), str(tecla_b))
+
+
+def comando_triplo(tecla_a, tecla_b, tecla_c):
+    pg.hotkey(str(tecla_a), str(tecla_b), str(tecla_c))
+
+
+def mover_mouse(x, y, tempo_=0.01):
+    pg.moveTo(x, y, tempo_)
+
+
+def clique_com_arraste(x, y, tempo_):
+    pg.drag(xOffset=x, yOffset=y, duration=tempo_)
+
+
+def localizar_mouse():
+    crdx, crdy = (pg.position())[0], (pg.position())[1]
+    return crdx, crdy
+
+
+def segurar_mouse():
+    pg.mouseDown()
+
+
+def soltar_mouse():
+    pg.mouseUp()
+
+
+def ver_lista_de_teclas():
+    print(pg.KEYBOARD_KEYS)
